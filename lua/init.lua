@@ -1,4 +1,6 @@
 local trie = require 'pathData'
+
+-- Helper function copied from the internet.
 function dump(o)
    if type(o) == 'table' then
       local s = '{ '
@@ -13,6 +15,16 @@ function dump(o)
    end
 end
 
+-- One of the coolest parts of Nixos modules is how the use laziness. Every
+-- module has access to the finished config table despite the finished table
+-- not existing yet. The Nix runtime finds a dependency tree of sorts between
+-- the various modules and executes them in the correct order. As long as the
+-- dependency tree doesn't have cycles, everything is fine.
+--
+-- Lua doesn't have laziness so we're going to create the dependency tree
+-- explicitely in this function using a topological sort. Since we don't have
+-- access to any cool abstractions like Applicative Functors, transformations
+-- (modifications) need to explicitely list their inputs and outputs.
 function runModTree(config)
     local allMods = Declua.allMods
     local paths = trie.empty()
@@ -36,6 +48,8 @@ function runModTree(config)
 
     local order = {}
     local marked = {}
+
+    -- This part copied pretty much exactly from Wikidpedia.
     visit = function(n)
         if marked[n] == 1 then
             return
@@ -50,6 +64,7 @@ function runModTree(config)
         marked[n] = 1
         order[#order + 1] = n
     end
+
     for i, _ in ipairs(allMods) do
         if not marked[i] then
             visit(i)

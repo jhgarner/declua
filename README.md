@@ -1,7 +1,9 @@
+This project is in a proof of concept stage right now.
+
 # Introduction
 
-Declua is a configuration framework for Neovim designed to
-be declarative and flexible.
+Declua is a configuration framework for Neovim designed to be declarative and
+flexible.
 
 Your Neovim settings are split into modules written by you and the community. A
 module defines options, transformations, and configs which control how Neovim
@@ -14,23 +16,9 @@ Although you can manually create transformations, options, and configs, it's
 recommended to use higher level functions instead. For example, there are
 functions for defining plugins, simple configs, and more.
 
-## For developers
-
-
-
-Declua provides an easy way to create and consume options for your plugin
-without introducing any incompatibilities with users not using Declua. Declua
-will attempt to source a declua.lua file from your plugin. If that file is
-called, you can assume that the `declua` global will exist and contain all the
-documented functions and attributes.
-
-As a plugin author, you likely want to create options. You can use the
-`declua.addOption` function for that. Your option can modify parts of the
-configuration and execute arbitrary lua code when the user's neovim starts.
-
-If you want to add declua support to a plugin you don't own, consider
-contributing to the declua ecosystem repository. That repository contains a
-variety of options for plugins.
+Interested in what Declua looks like? Take a look at the example folder. If you
+want to pull back the curtain a bit, start with the builtinMods file in the lua
+folder.
 
 ## Declarative
 
@@ -40,7 +28,27 @@ sources.
 
 # TODO
 
-1. The current design only really works with a monorepo of modifications and
+1. Declua doesn't actually use the concept of modules anywhere in its
+   implementation. I'm currently using module to just mean some Lua file which
+   defines options and transformations in one place. Should I change the
+   nomenclature at some point or add helper functions for modules to Declua?
+
+2. Error messages are gross right now. If you mess anything up, you get very
+   little information and need to do some digging to find out what went wrong. A
+   real version of Declua should have friendly error messages even in the face
+   of poorly written transformations or options.
+
+3. Some mechanism to search options and transformations would be really cool.
+
+4. The implementation is kind of gross and uses inconsistent naming.
+
+5. Use a file format other than Lua for defining user config files. Load it into
+   Lua somewhere. The config format should make it easy to set deeply nested
+   tables.
+
+6. Consider rewriting in a language which compiles to Lua.
+
+6. The current design only really works with a monorepo of transformations and
    options. Although convenient for bootstrapping a project, would it be better
    to encourage plugin authors to support Declua in their repositories? If
    Declua wants to be a Neovim distribution of sorts then a monorepo might be a

@@ -1,5 +1,3 @@
-addOption({"vim", "o"}, shallowTable)
-
 addOption({"config", "lsp", "supported"}, array)
 
 addOption({"config", "lsp", "enable"}, bool)

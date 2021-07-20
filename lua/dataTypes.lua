@@ -68,18 +68,4 @@ function unit.merge(old, new)
    return {}
 end
 
--- default = {}
--- function default(inner)
---    outer = {}
---    outer.isValid = function(v)
---       return v == nil or inner.isValid(v)
---    end
---    outer.merge = function(old, new)
-
---    end
--- end
--- function default.isValid(v)
---    return t.value == nil or t.value.isValid(t)
--- end
-
-return {shallowTable = shallowTable, array = array, addOption = addOption}
+return {addOption = addOption}
